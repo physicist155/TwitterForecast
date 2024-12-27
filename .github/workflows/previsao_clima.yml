@@ -1,0 +1,49 @@
+name: Previsão do Tempo
+
+on:
+  schedule:
+    # Agendando para os horários desejados em UTC (convertidos de Brasília -3h)
+    - cron: '10 11 * * *' # 08:10 BRT
+    - cron: '10 19 * * *' # 16:10 BRT
+    - cron: '10 22 * * *' # 19:10 BRT
+
+  workflow_dispatch: # Permite execução manual do workflow
+
+jobs:
+  executar_previsao:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout do código
+      uses: actions/checkout@v3
+
+    - name: Configurar Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.11.9'
+
+    - name: Instalar dependências
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+
+    - name: Configurar chave da API
+      env:
+        OW_API_KEY: ${{ secrets.OW_API_KEY }}
+      run: echo "Chave configurada."
+
+    - name: Executar script
+      env:
+        OW_API_KEY: ${{ secrets.OW_API_KEY }}
+      run: python previsaoSSA.py
+
+    - name: Configurar Git para commit
+      run: |
+        git config --global user.name "github-actions[bot]"
+        git config --global user.email "github-actions[bot]@users.noreply.github.com"
+
+    - name: Adicionar e commitar imagem gerada
+      run: |
+        git add previsao.png
+        git commit -m "Atualização automática da previsão do tempo"
+        git push origin main
