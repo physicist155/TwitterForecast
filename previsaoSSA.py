@@ -48,7 +48,7 @@ descricao_icones = {
 pontos_prefeituras = [
     {"nome": "Ilhas dos Frades", "coordenadas": (-38.638, -12.785)}, #Ilhas dos Frades
     {"nome": "Ilha de Maré", "coordenadas": (-38.525, -12.775)}, #Ilhas de Maré
-    {"nome": "Barra", "coordenadas": (-38.51, -13.005)},
+    {"nome": "Ondina", "coordenadas": (-38.51, -13.005)},
     {"nome": "Pituba", "coordenadas": (-38.458, -12.993)},
     {"nome": "Brotas", "coordenadas": (-38.495, -12.98)},
     {"nome": "Liberdade", "coordenadas": (-38.483, -12.945)},
