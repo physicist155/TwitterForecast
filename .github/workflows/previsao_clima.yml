@@ -35,6 +35,10 @@ jobs:
     - name: Executar script
       env:
         OW_API_KEY: ${{ secrets.OW_API_KEY }}
+        CONSUMER_KEY: ${{ secrets.CONSUMER_KEY }}
+        CONSUMER_SECRET: ${{ secrets.CONSUMER_SECRET }}
+        ACCESS_TOKEN: ${{ secrets.ACCESS_TOKEN }}
+        ACCESS_TOKEN_SECRET: ${{ secrets.ACCESS_TOKEN_SECRET }}
       run: python previsaoSSA.py
 
     - name: Configurar Git para commit
