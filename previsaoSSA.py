@@ -8,6 +8,7 @@ import requests
 from datetime import datetime
 from pytz import timezone
 import os
+import tweepy
 
 def hora_atual_brasilia():
     # Define o fuso horário de Brasília
@@ -186,10 +187,42 @@ for i, var in enumerate(variaveis):
         transform=ax.transAxes  # Posicionar em fração do eixo
     )
 ax.set_aspect("equal")  
-ax.set_title(f"Previsão do Tempo para {dt_brasilia.strftime('%d/%m/%Y às %H:%M:%S')}")
+#ax.set_title(f"Previsão do Tempo para {dt_brasilia.strftime('%d/%m/%Y às %H:%M:%S')}")
 
 ax.set_xticks([])
 ax.set_yticks([])
 ax.set_facecolor("powderblue") 
 # ax.axis('off')
 plt.savefig('previsao.png', dpi=300,pad_inches=0.1, bbox_inches='tight')
+
+# Load environment variables
+CONSUMER_KEY = os.getenv("CONSUMER_KEY")
+CONSUMER_SECRET = os.getenv("CONSUMER_SECRET")
+ACCESS_TOKEN = os.getenv("ACCESS_TOKEN")
+ACCESS_TOKEN_SECRET = os.getenv("ACCESS_TOKEN_SECRET")
+
+# Ensure all keys are available
+if not all([CONSUMER_KEY, CONSUMER_SECRET, ACCESS_TOKEN, ACCESS_TOKEN_SECRET]):
+    raise ValueError("One or more required environment variables are missing.")
+ 
+# Authentication with Twitter
+auth = tweepy.OAuthHandler(CONSUMER_KEY, CONSUMER_SECRET)
+auth.set_access_token(ACCESS_TOKEN, ACCESS_TOKEN_SECRET)
+api = tweepy.API(auth, wait_on_rate_limit=True)
+
+# Initialize Tweepy Client
+client = tweepy.Client(
+    consumer_key=CONSUMER_KEY,
+    consumer_secret=CONSUMER_SECRET,
+    access_token=ACCESS_TOKEN,
+    access_token_secret=ACCESS_TOKEN_SECRET
+)
+
+def post_tweet(text):
+    client.create_tweet(text=text)
+
+def upload_media(legenda, filename):
+    media_id = api.media_upload(filename).media_id_string
+    client.create_tweet(text=legenda,media_ids=[media_id])
+
+upload_media(f"Previsão do Tempo para {dt_brasilia.strftime('%d/%m/%Y às %H:%M:%S')}",'previsao.png')
