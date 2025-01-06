@@ -193,7 +193,7 @@ ax.set_xticks([])
 ax.set_yticks([])
 ax.set_facecolor("powderblue") 
 # ax.axis('off')
-plt.savefig('previsao.png', dpi=300,pad_inches=0.1, bbox_inches='tight')
+plt.savefig('previsao.png', dpi=300,pad_inches=0.0, bbox_inches='tight')
 
 # Load environment variables
 consumer_key = os.getenv("CONSUMER_KEY")
